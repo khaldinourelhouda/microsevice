@@ -1,0 +1,40 @@
+server:
+  port: 5000
+
+spring:
+  application:
+    name: GATEWAY-SERVICE
+  cloud:
+    gateway:
+      routes:
+        - id: USER-SERVICE
+          uri: http://localhost:5001/
+          predicates:
+              - Method=GET, POST, PUT, DELETE, OPTIONS
+              - Path=/auth/**,/users/**,/api/users/**,/auth/signup
+
+
+
+
+    default-filters: # Define default filters here
+      - DedupeResponseHeader= Access-Control-Allow-Credentials Access-Control-Allow-Origin # Example of a default filter
+    globalcors:
+      cors-configurations:
+        '[/**]': # Configure CORS for all routes
+            allowedOrigins: "*" # Set allowed origins to allow requests from any origin
+            allowedHeaders: "*"
+            allowedMethods: "*"
+            allowCredentials: true
+
+
+
+
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka
